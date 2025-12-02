@@ -1,24 +1,14 @@
 CREATE OR REPLACE VIEW t_eva_strnadova_project_SQL_secondary_final AS
 
-WITH eu_years AS (
-    -- get all years available for EU
-    SELECT DISTINCT "year"
-    FROM economies
-    WHERE country = 'European Union'
+WITH dates_of_interest as (
+	SELECT DISTINCT year FROM t_eva_strnadova_project_SQL_primary_final pt
 ),
 european_countries AS (
     -- list of European countries
     SELECT *
     FROM countries
-    WHERE country IN (
-        'Austria','Belgium','Bulgaria','Croatia','Cyprus','Czech Republic','Denmark',
-        'Estonia','Finland','France','Germany','Greece','Hungary',
-        'Iceland','Ireland','Italy','Latvia','Lithuania','Luxembourg',
-        'Malta','Netherlands','Norway','Poland','Portugal','Romania',
-        'Slovakia','Slovenia','Spain','Sweden','United Kingdom'
-    )
+    WHERE continent = 'Europe'
 )
-
 SELECT 
     c.country AS stat,
     e."year" AS rok,
@@ -28,6 +18,6 @@ SELECT
 FROM european_countries c
 JOIN economies e
     ON c.country = e.country
-JOIN eu_years ey
-    ON e."year" = ey."year"
-ORDER BY e."year", c.country;
+join dates_of_interest doi
+	on doi.year = e.year
+ORDER BY c.country, e."year";

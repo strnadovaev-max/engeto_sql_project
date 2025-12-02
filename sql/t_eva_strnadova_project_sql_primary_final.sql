@@ -1,3 +1,5 @@
+CREATE OR REPLACE VIEW t_eva_strnadova_project_SQL_primary_final AS
+
 WITH price_by_year_cat AS (
   SELECT
     CAST(EXTRACT(YEAR FROM COALESCE(pr.date_from, pr.date_to)) AS int) AS year,
